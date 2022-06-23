@@ -94,7 +94,6 @@ $(".card .list-group").sortable({
   }
 });
 
-
 // delete functionality
 $("#trash").droppable({
   accept: ".card .list-group-item",
@@ -109,6 +108,11 @@ $("#trash").droppable({
   out: function(event, ui) {
     console.log("trash out");
   }
+});
+
+
+$("#modalDueDate").datepicker({
+  minDate: 1
 });
 
 
@@ -151,9 +155,11 @@ $(".list-group").on("click", "p", function() {
   var text = $(this)
     .text()
     .trim();
+
   var textInput = $("<textarea>")
     .addClass("form-control")
     .val(text);
+
   $(this).replaceWith(textInput);
   textInput.trigger("focus");
   console.log(text);
@@ -195,10 +201,18 @@ $(".list-group").on("click", "span", function() {
   
   $(this).replaceWith(dateInput);
 
+  dateInput.datepicker({
+    minDate: 1,
+    onClose: function() {
+      // when calender is close, force a "Change" event on the 'dateInput'
+      $(this).trigger("change");
+    }
+  });
+
   dateInput.trigger("focus");
 });
 
-$(".list-group").on("blur", "input[type='text']", function() {
+$(".list-group").on("change", "input[type='text']", function() {
   var date = $(this)
     .val()
     .trim();
